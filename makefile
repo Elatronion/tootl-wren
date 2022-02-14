@@ -6,7 +6,7 @@ TARGET_CPU ?= 64
 CONFIG ?= debug
 
 SRC_DIR ?= src
-BUILD_DIR ?= bin
+BUILD_DIR ?= bin/$(TARGET_OS)
 TARGET_NAME ?= libtootlwren.so
 
 GODOT_HEADER_PATH=./godot-cpp/godot-headers/
@@ -32,6 +32,7 @@ SRCS := $(CPPSRCS) $(CSRCS)
 OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
 
 $(BUILD_DIR)/$(TARGET_NAME): $(OBJS)
+	$(MKDIR_P) $(dir $@)
 	$(CXX) -o $@ -shared $(OBJS) -L$(LIBPATH) -l$(GODOTLIB)
 
 $(BUILD_DIR)/%.cpp.o: %.cpp
