@@ -28,6 +28,7 @@ void TootlWren::_register_methods() {
 	register_signal<TootlWren>((char *)"load_imv", "node", GODOT_VARIANT_TYPE_OBJECT, "imv_to_load", GODOT_VARIANT_TYPE_STRING);
 	register_signal<TootlWren>((char *)"load_minigame", "node", GODOT_VARIANT_TYPE_OBJECT, "minigame_to_load", GODOT_VARIANT_TYPE_STRING, "can_exit", GODOT_VARIANT_TYPE_BOOL);
 	register_signal<TootlWren>((char *)"render", "node", GODOT_VARIANT_TYPE_OBJECT, "sprite", GODOT_VARIANT_TYPE_STRING, "x", GODOT_VARIANT_TYPE_REAL, "y", GODOT_VARIANT_TYPE_REAL, "w", GODOT_VARIANT_TYPE_REAL, "h", GODOT_VARIANT_TYPE_REAL, "r", GODOT_VARIANT_TYPE_REAL);
+	register_signal<TootlWren>((char *)"render_text", "node", GODOT_VARIANT_TYPE_OBJECT, "string", GODOT_VARIANT_TYPE_STRING, "x", GODOT_VARIANT_TYPE_REAL, "y", GODOT_VARIANT_TYPE_REAL, "s", GODOT_VARIANT_TYPE_REAL);
 	register_signal<TootlWren>((char *)"load_texture", "node", GODOT_VARIANT_TYPE_OBJECT, "sprite_path", GODOT_VARIANT_TYPE_STRING, "sprite_name", GODOT_VARIANT_TYPE_STRING);
 	register_signal<TootlWren>((char *)"load_audio", "node", GODOT_VARIANT_TYPE_OBJECT, "audio_path", GODOT_VARIANT_TYPE_STRING, "audio_name", GODOT_VARIANT_TYPE_STRING);
 }
@@ -228,6 +229,14 @@ void wrenRender(WrenVM* vm) {
 	global_this->emit_signal("render", String(sprite_name), x, y, w, h, r);
 }
 
+void wrenRenderText(WrenVM* vm) {
+	const char* string = wrenGetSlotString(vm, 1);
+	float x = wrenGetSlotDouble(vm, 2);
+	float y = wrenGetSlotDouble(vm, 3);
+	float s = wrenGetSlotDouble(vm, 4);
+	global_this->emit_signal("render_text", String(string), x, y, s);
+}
+
 void wrenLoadTexture(WrenVM* vm) {
 	const char* path_str = wrenGetSlotString(vm, 1);
 	const char* name_str = wrenGetSlotString(vm, 2);
@@ -342,7 +351,7 @@ WrenForeignMethodFn bindForeignMethod(
 				return wrenRender;
 			}
 			else if (isStatic && strcmp(signature, "renderText(_,_,_,_)") == 0) {
-				//return wrenRenderText;
+				return wrenRenderText;
 			}
 			else if (isStatic && strcmp(signature, "getWidth()") == 0) {
 				return wrenWindowWidth;
