@@ -269,6 +269,10 @@ void wrenInputGetMouseY(WrenVM* vm) {
 	wrenSetSlotDouble(vm, 0, mouse_y);
 }
 
+void wrenGameLoad(WrenVM* vm) {
+	global_game_manager->call("LoadGame");
+}
+
 void wrenDefaultFunc(WrenVM* vm) {}
 
 WrenForeignMethodFn bindForeignMethod(
@@ -334,15 +338,15 @@ WrenForeignMethodFn bindForeignMethod(
 			if (isStatic && strcmp(signature, "walk(_,_,_)") == 0) {
 				return wrenCharacterWalk;
 			}
-		}
+		}*/
 		else if (strcmp(className, "GameSaver") == 0) {
-			if (isStatic && strcmp(signature, "save()") == 0) {
+			/*if (isStatic && strcmp(signature, "save()") == 0) {
 				return wrenGameSave;
 			}
-			else if (isStatic && strcmp(signature, "load()") == 0) {
+			else */if (isStatic && strcmp(signature, "load()") == 0) {
 				return wrenGameLoad;
 			}
-		}*/
+		}
 		// Other classes in televoid-core...
 	}
 	else if (strcmp(module, "minigame-core") == 0) {
