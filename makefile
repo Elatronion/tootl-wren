@@ -7,7 +7,7 @@ CONFIG ?= debug
 
 SRC_DIR ?= src
 BUILD_DIR ?= bin/$(TARGET_OS)
-TARGET_NAME ?= libtootlwren.so
+TARGET_NAME ?= libtootlwren
 
 GODOT_HEADER_PATH=./godot-cpp/godot-headers/
 CPP_BINDING_PATH=./godot-cpp/
@@ -16,8 +16,17 @@ CPPPATH=-Isrc/ -I./src/wren/vm -I./src/wren/optional -I$(GODOT_HEADER_PATH) -I$(
 LIBPATH=$(CPP_BINDING_PATH)bin/
 GODOTLIB=godot-cpp.$(TARGET_OS).$(CONFIG).$(TARGET_CPU)
 
-CXX=g++
+CXX:=g++
 CXXFLAGS:=-std=c++17 -fPIC $(CPPPATH)
+
+
+ifeq ($(TARGET_OS), windows)
+CXX:=x86_64-w64-mingw32-g++
+TARGET_NAME:=$(TARGET_NAME).dll
+endif
+ifeq ($(TARGET_OS), linux)
+TARGET_NAME:=$(TARGET_NAME).so
+endif
 
 ifeq ($(CONFIG), debug)
 CXXFLAGS:=-g $(CXXFLAGS)
